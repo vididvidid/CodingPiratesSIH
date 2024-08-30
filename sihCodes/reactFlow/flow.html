@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Diagram with Arrows and Drawing</title>
+    <style>
+        #diagram-container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            border: 1px solid #000;
+        }
+        .node {
+            position: absolute;
+            width: 100px;
+            height: 50px;
+            background-color: #f0f0f0;
+            border: 1px solid #999;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: move;
+            z-index: 10;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        #drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <div id="diagram-container">
+        <canvas id="drawing-canvas"></canvas>
+        <svg id="arrows"></svg>
+        <div class="node" style="left: 50px; top: 50px;">Node 1</div>
+        <div class="node" style="left: 200px; top: 200px;">Node 2</div>
+        <div class="node" style="left: 350px; top: 100px;">Node 3</div>
+    </div>
+    <button id="draw-mode">Toggle Draw Mode</button>
+
+    <script>
+        const container = document.getElementById('diagram-container');
+        const svg = document.getElementById('arrows');
+        const nodes = document.querySelectorAll('.node');
+        const canvas = document.getElementById('drawing-canvas');
+        const ctx = canvas.getContext('2d');
+        const drawModeButton = document.getElementById('draw-mode');
+
+        let isDragging = false;
+        let isDrawing = false;
+        let drawMode = false;
+        let currentNode = null;
+        let offset = { x: 0, y: 0 };
+        let startPos = { x: 0, y: 0 };
+
+        // Set canvas size
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+
+        function startDrag(e) {
+            if (drawMode) return;
+            isDragging = true;
+            currentNode = e.target;
+            offset.x = e.clientX - currentNode.offsetLeft;
+            offset.y = e.clientY - currentNode.offsetTop;
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            const containerRect = container.getBoundingClientRect();
+            let newX = e.clientX - offset.x - containerRect.left;
+            let newY = e.clientY - offset.y - containerRect.top;
+            
+            newX = Math.max(0, Math.min(newX, containerRect.width - currentNode.offsetWidth));
+            newY = Math.max(0, Math.min(newY, containerRect.height - currentNode.offsetHeight));
+            
+            currentNode.style.left = `${newX}px`;
+            currentNode.style.top = `${newY}px`;
+            drawArrows();
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            currentNode = null;
+        }
+
+        function drawArrows() {
+            svg.innerHTML = '';
+            
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('markerWidth', '10');
+            marker.setAttribute('markerHeight', '7');
+            marker.setAttribute('refX', '10');
+            marker.setAttribute('refY', '3.5');
+            marker.setAttribute('orient', 'auto');
+            const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+            marker.appendChild(polygon);
+            defs.appendChild(marker);
+            svg.appendChild(defs);
+
+            for (let i = 0; i < nodes.length - 1; i++) {
+                const startNode = nodes[i];
+                const endNode = nodes[i + 1];
+                const startX = startNode.offsetLeft + startNode.offsetWidth / 2;
+                const startY = startNode.offsetTop + startNode.offsetHeight / 2;
+                const endX = endNode.offsetLeft + endNode.offsetWidth / 2;
+                const endY = endNode.offsetTop + endNode.offsetHeight / 2;
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', startX);
+                line.setAttribute('y1', startY);
+                line.setAttribute('x2', endX);
+                line.setAttribute('y2', endY);
+                line.setAttribute('stroke', 'black');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('marker-end', 'url(#arrowhead)');
+
+                svg.appendChild(line);
+            }
+        }
+
+        function startDrawing(e) {
+            if (!drawMode) return;
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            startPos.x = e.clientX - rect.left;
+            startPos.y = e.clientY - rect.top;
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const endX = e.clientX - rect.left;
+            const endY = e.clientY - rect.top;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.rect(startPos.x, startPos.y, endX - startPos.x, endY - startPos.y);
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function toggleDrawMode() {
+            drawMode = !drawMode;
+            drawModeButton.textContent = drawMode ? "Exit Draw Mode" : "Enter Draw Mode";
+            container.style.cursor = drawMode ? "crosshair" : "default";
+        }
+
+        nodes.forEach(node => {
+            node.addEventListener('mousedown', startDrag);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            drag(e);
+            draw(e);
+        });
+        document.addEventListener('mouseup', () => {
+            stopDrag();
+            stopDrawing();
+        });
+
+        canvas.addEventListener('mousedown', startDrawing);
+        drawModeButton.addEventListener('click', toggleDrawMode);
+
+        drawArrows();
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+Hierarchy: { Educational Institution, Department of Computer Science, Academic Performance, Student Grades }
+Course Completion Rates
+
+Hierarchy: { Educational Institution, Department of Computer Science, Academic Performance, Course Completion Rates }
+Program Statistics
+
+Hierarchy: { Educational Institution, Department of Mathematics, Academic Performance, Program Statistics }
+Research Publications - AI Research Paper
+
+Hierarchy: { Educational Institution, Department of Computer Science, Research Publications, Journals, AI Research Paper }
+Research Publications - Algebra Conference Paper
+
+Hierarchy: { Educational Institution, Department of Mathematics, Research Publications, Conferences, Algebra Conference Paper }
+Student and Faculty Achievements - Best Professor Award
+
+Hierarchy: { Educational Institution, Department of Computer Science, Student and Faculty Achievements, 2024 Best Professor Award }
+Scholarship Awards List
+
+Hierarchy: { Educational Institution, Department of Mathematics, Student and Faculty Achievements, Scholarship Awards List }
+Financial Statements - Budget Report
+
+Hierarchy: { Educational Institution, Department of Computer Science, Financial Statements, 2023 Budget Report }
+Financial Statements - Math Department Budget
+
+Hierarchy: { Educational Institution, Department of Mathematics, Financial Statements, 2024 Math Department Budget }
+Infrastructure Developments - Lab Setup Proposal
+
+Hierarchy: { Educational Institution, Department of Computer Science, Infrastructure Developments, New Lab Setup Proposal }
+Infrastructure Developments - Math Building Proposal
+
+Hierarchy: { Educational Institution, Department of Mathematics, Infrastructure Developments, New Math Building Proposal }
+Extracurricular Activities - Robotics Club Events
+
+Hierarchy: { Educational Institution, Department of Computer Science, Extracurricular Activities, Robotics Club Events }
+Extracurricular Activities - Math Club Activities
+
+Hierarchy: { Educational Institution, Department of Mathematics, Extracurricular Activities, Math Club Activities }

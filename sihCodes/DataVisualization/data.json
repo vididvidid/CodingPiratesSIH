@@ -1,0 +1,37 @@
+{
+    "files": [
+      {
+        "name": "2024_Sem1_Grades.xlsx",
+        "type": "file",
+        "hierarchy": [
+          "Educational Institution",
+          "Department of Computer Science",
+          "Academic Performance",
+          "Student Grades"
+        ],
+        "path": "/files/computer_science/academic_performance/2024_Sem1_Grades.xlsx",
+        "creation_time": "2024-01-15T08:30:00Z",
+        "updated_time": "2024-08-25T10:45:00Z",
+        "size": "256KB",
+        "file_type": "xlsx",
+        "description": "Semester 1 grades for the Computer Science department."
+      },
+      {
+        "name": "AI_Research_Paper.pdf",
+        "type": "file",
+        "hierarchy": [
+          "Educational Institution",
+          "Department of Computer Science",
+          "Research Publications",
+          "Journals"
+        ],
+        "path": "/files/computer_science/research_publications/AI_Research_Paper.pdf",
+        "creation_time": "2023-12-01T09:15:00Z",
+        "updated_time": "2024-08-20T14:22:00Z",
+        "size": "1.2MB",
+        "file_type": "pdf",
+        "description": "Research paper on AI published in a journal."
+      }
+    ]
+  }
+  
