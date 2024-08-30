@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Drawing Whiteboard</title>
+    <title>Advanced Drawing Whiteboard</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
     <div class="toolbar">
-        <button id="pen">Pen</button>
-        <button id="eraser">Eraser</button>
-        <button id="rectangle">Rectangle</button>
-        <button id="circle">Circle</button>
+        <button id="component">📋 Component</button>
+        <button id="pen">✏️ Line</button>
+        <button id="eraser">🧽 Eraser</button>
+        <button id="rectangle">⬛ Rectangle</button>
+        <button id="circle">⚪ Circle</button>
+        <button id="arrow">➡️ Arrow</button>
+        <button id="text">📝 Text</button>
+        <input type="color" id="colorPicker" value="#000000">
     </div>
-    <canvas id="whiteboard"></canvas>
+  
+    <canvas id="whiteboard"></canvas> <!-- Keep canvas here -->
+    <div id="graph"></div> <!-- Move graph div outside -->
+    
     <script src="script.js"></script>
+    <script src="script2.js"></script>
 </body>
 </html>

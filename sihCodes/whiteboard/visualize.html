@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Hierarchy Force-Directed Graph</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #graph {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="graph"></div>
+
+    <script>
+        // Your JSON data
+        const jsonData = {
+            "files": [
+                {
+                    "name": "2024_Sem1_Grades.xlsx",
+                    "type": "file",
+                    "hierarchy": [
+                        "Educational Institution",
+                        "Department of Computer Science",
+                        "Academic Performance",
+                        "Student Grades"
+                    ],
+                    "path": "/files/computer_science/academic_performance/2024_Sem1_Grades.xlsx",
+                    "creation_time": "2024-01-15T08:30:00Z",
+                    "updated_time": "2024-08-25T10:45:00Z",
+                    "size": "256KB",
+                    "file_type": "xlsx",
+                    "description": "Semester 1 grades for the Computer Science department."
+                },
+                {
+                    "name": "AI_Research_Paper.pdf",
+                    "type": "file",
+                    "hierarchy": [
+                        "Educational Institution",
+                        "Department of Computer Science",
+                        "Research Publications",
+                        "Journals"
+                    ],
+                    "path": "/files/computer_science/research_publications/AI_Research_Paper.pdf",
+                    "creation_time": "2023-12-01T09:15:00Z",
+                    "updated_time": "2024-08-20T14:22:00Z",
+                    "size": "1.2MB",
+                    "file_type": "pdf",
+                    "description": "Research paper on AI published in a journal."
+                }
+            ]
+        };
+
+        // Process JSON data to create nodes and links
+        function processData(jsonData) {
+            const nodes = new Set();
+            const links = [];
+
+            jsonData.files.forEach(file => {
+                file.hierarchy.forEach((node, index) => {
+                    nodes.add(node);
+                    if (index > 0) {
+                        links.push({source: file.hierarchy[index-1], target: node});
+                    }
+                });
+                nodes.add(file.name);
+                links.push({source: file.hierarchy[file.hierarchy.length-1], target: file.name});
+            });
+
+            return {
+                nodes: Array.from(nodes).map(id => ({id})),
+                links: links
+            };
+        }
+
+        const data = processData(jsonData);
+
+        const width = 800;
+        const height = 600;
+
+        const svg = d3.select("#graph")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const simulation = d3.forceSimulation(data.nodes)
+            .force("link", d3.forceLink(data.links).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        const link = svg.append("g")
+            .selectAll("line")
+            .data(data.links)
+            .join("line")
+            .attr("stroke", "#999")
+            .attr("stroke-opacity", 0.6)
+            .attr("stroke-width", 2);
+
+        const node = svg.append("g")
+            .selectAll("circle")
+            .data(data.nodes)
+            .join("circle")
+            .attr("r", 5)
+            .attr("fill", d => d.id.includes(".") ? "#f68e26" : "#69b3a2")
+            .call(drag(simulation));
+
+        const text = svg.append("g")
+            .selectAll("text")
+            .data(data.nodes)
+            .join("text")
+            .text(d => d.id)
+            .attr("font-size", 12)
+            .attr("dx", 8)
+            .attr("dy", 3);
+
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+
+            text
+                .attr("x", d => d.x)
+                .attr("y", d => d.y);
+        });
+
+        function drag(simulation) {
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+            
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+            
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+            
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+        }
+    </script>
+</body>
+</html>

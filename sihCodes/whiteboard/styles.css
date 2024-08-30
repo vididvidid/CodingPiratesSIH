@@ -4,20 +4,67 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f0f0;
+    background-color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
 }
 
 .toolbar {
-    margin: 10px;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #4A90E2;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 button {
-    margin: 5px;
-    padding: 10px;
-    font-size: 16px;
+    margin: 0 10px;
+    padding: 10px 15px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #007AFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #005BB5;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.5);
+}
+
+#colorPicker {
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
 }
 
 canvas {
-    border: 1px solid #000;
+    border: 3px solid #4A90E2;
     background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+#graph {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
